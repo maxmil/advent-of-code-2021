@@ -1,3 +1,8 @@
+package day04
+
+import println
+import readInputAsText
+
 typealias Board = List<List<BingoNumber>>
 
 data class BingoNumber(val number: Int, var called: Boolean = false)
@@ -48,11 +53,11 @@ fun main() {
         return play(numbers, boards).last().score()
     }
 
-    val testInput = readInputAsText("Day04_test")
+    val testInput = readInputAsText("day04/Day04_test")
     check(part1(testInput) == 4512)
     check(part2(testInput) == 1924)
 
-    val input = readInputAsText("Day04")
+    val input = readInputAsText("day04/Day04")
     part1(input).println()
     part2(input).println()
 }

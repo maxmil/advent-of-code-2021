@@ -1,3 +1,8 @@
+package day02
+
+import println
+import readInput
+
 data class Position(val aim: Int = 0, val depth: Int = 0, val position: Int = 0)
 
 fun main() {
@@ -26,11 +31,11 @@ fun main() {
         }.let { it.depth * it.position }
 
 
-    val testInput = readInput("Day02_test")
+    val testInput = readInput("day02/Day02_test")
     check(part1(testInput) == 150)
     check(part2(testInput) == 900)
 
-    val input = readInput("Day02")
+    val input = readInput("day02/Day02")
     part1(input).println()
     part2(input).println()
 }
