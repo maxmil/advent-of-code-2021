@@ -4,7 +4,6 @@ import println
 import readInput
 import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.min
 
 data class Point(val x: Int, val y: Int)
 data class Line(val start: Point, val end: Point)
@@ -15,39 +14,27 @@ fun main() {
 
     fun Line.isDiagonal() = this.start.x != this.end.x && this.start.y != this.end.y
 
-    fun part1(input: List<String>): Int {
+    fun Line.addPoints(points: MutableMap<Point, Int>) {
+        val distX = end.x - start.x
+        val distY = end.y - start.y
+        val steps = max(abs(distX), abs(distY))
+        for (inc in 0..steps) {
+            val x = start.x + distX * inc / steps
+            val y = start.y + distY * inc / steps
+            points[Point(x, y)] = points.getOrDefault(Point(x, y), 0) + 1
+        }
+    }
+
+    fun dangerPoints(input: List<String>, predicate: (Line) -> Boolean = { true }): Int {
         val lines = input.map { line -> line.split(" -> ").let { Line(it[0].toCoords(), it[1].toCoords()) } }
         val points = mutableMapOf<Point, Int>()
-        lines.forEach { line ->
-            if (!line.isDiagonal()) {
-                for (x in min(line.start.x, line.end.x)..max(line.start.x, line.end.x))
-                    for (y in min(line.start.y, line.end.y)..max(line.start.y, line.end.y))
-                        points[Point(x, y)] = points.getOrDefault(Point(x, y), 0) + 1
-            }
-        }
+        lines.filter(predicate).forEach { it.addPoints(points) }
         return points.values.count { it > 1 }
     }
 
-    fun part2(input: List<String>): Int {
-        val lines = input.map { line -> line.split(" -> ").let { Line(it[0].toCoords(), it[1].toCoords()) } }
-        val points = mutableMapOf<Point, Int>()
-        lines.forEach { line ->
-            if (!line.isDiagonal()) {
-                for (x in min(line.start.x, line.end.x)..max(line.start.x, line.end.x))
-                    for (y in min(line.start.y, line.end.y)..max(line.start.y, line.end.y))
-                        points[Point(x, y)] = points.getOrDefault(Point(x, y), 0) + 1
-            } else {
-                val distX = line.end.x - line.start.x
-                val distY = line.end.y - line.start.y
-                for (inc in 0..abs(distX)) {
-                    val x = if (distX < 0) line.start.x - inc else line.start.x + inc
-                    val y = if (distY < 0) line.start.y - inc else line.start.y + inc
-                    points[Point(x, y)] = points.getOrDefault(Point(x, y), 0) + 1
-                }
-            }
-        }
-        return points.values.count { it > 1 }
-    }
+    fun part1(input: List<String>) = dangerPoints(input) { !it.isDiagonal() }
+
+    fun part2(input: List<String>) = dangerPoints(input)
 
     val testInput = readInput("day05/Day05_test")
     check(part1(testInput) == 5)
