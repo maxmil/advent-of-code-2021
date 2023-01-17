@@ -9,7 +9,7 @@ fun main() {
 
     fun simulate(initial: Map<Int, Long>, days: Int): Map<Int, Long> {
         val fish = initial.toMutableMap()
-        for (days in 1..days) {
+        repeat(days) {
             val reproducing = fish.getOrDefault(0, 0)
             for (timer in 0..7) fish[timer] = fish.getOrDefault(timer + 1, 0)
             fish[8] = reproducing
