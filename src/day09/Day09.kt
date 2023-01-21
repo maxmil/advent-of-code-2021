@@ -2,6 +2,7 @@ package day09
 
 import println
 import readInput
+import kotlin.system.measureTimeMillis
 
 data class Position(val x: Int, val y: Int)
 typealias Grid = List<List<Int>>
@@ -47,11 +48,30 @@ fun main() {
             .reduce { acc, size -> acc * size }
     }
 
+    fun part2BFS(grid: Grid): Int {
+        return grid.lowPoints().map { lowPoint ->
+            var cnt = 0
+            val visited = mutableSetOf<Position>()
+            val toVisit = grid.adjacent(lowPoint).toMutableList()
+            while (toVisit.isNotEmpty()) {
+                val position = toVisit.removeFirst()
+                if (!visited.add(position) || grid[position.y][position.x] == 9) continue
+                cnt++;
+                toVisit.addAll(grid.adjacent(position))
+            }
+            cnt;
+        }.sorted()
+            .takeLast(3)
+            .reduce { acc, size -> acc * size }
+    }
+
     val testGrid = readInput("day09/input_test").parseGrid()
     check(part1(testGrid) == 15)
     check(part2(testGrid) == 1134)
+    check(part2BFS(testGrid) == 1134)
 
     val grid = readInput("day09/input").parseGrid()
     part1(grid).println()
-    part2(grid).println()
+    measureTimeMillis {  print(part2(grid)) }.let { println(" in ${it}ms") }
+    measureTimeMillis {  print(part2BFS(grid)) }.let { println(" in ${it}ms") }
 }
