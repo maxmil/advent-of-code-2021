@@ -55,7 +55,7 @@ fun main() {
 
     val testInput = readInput("day11/input_test")
     check(part1(testInput.toMutableList()) == 1656)
-    check(part2(testInput.toMutableList()).apply { println(this) } == 195)
+    check(part2(testInput.toMutableList()) == 195)
 
     val input = readInput("day11/input")
     part1(input.toMutableList()).println()
