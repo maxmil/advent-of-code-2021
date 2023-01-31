@@ -51,7 +51,7 @@ fun part2(input: String) {
 fun main() {
 
     val testInput = readInputAsText("day13/input_test")
-    check(part1(testInput).apply { println(this) } == 17)
+    check(part1(testInput) == 17)
     part2(testInput)
 
     val input = readInputAsText("day13/input")
